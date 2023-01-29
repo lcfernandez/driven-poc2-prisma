@@ -14,7 +14,6 @@ model ratings {
   rating     Int?     @db.SmallInt
   comment    String?
   created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @default(now()) @db.Timestamp(6)
   recipes    recipes  @relation(fields: [recipe_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users      users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -26,14 +25,12 @@ model recipes {
   ingredients String
   directions  String
   created_at  DateTime  @default(now()) @db.Timestamp(6)
-  updated_at  DateTime  @default(now()) @db.Timestamp(6)
   ratings     ratings[]
 }
 
 model users {
   id         Int       @unique @default(autoincrement())
-  username   String    @unique(map: "users_name_key")
+  username   String    @unique
   created_at DateTime  @default(now()) @db.Timestamp(6)
-  updated_at DateTime  @default(now()) @db.Timestamp(6)
   ratings    ratings[]
 }

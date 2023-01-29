@@ -1,7 +1,25 @@
-import { userFind, usersCreate, usersFind } from "../services/usersService.js";
+import { userDestroy, userFind, usersCreate, usersFind, userUpdate } from "../services/usersService.js";
 import { NewUser } from "../protocols.js";
 
 import { Request, Response } from "express";
+
+export async function userDelete(req: Request, res: Response) {
+    const id = Number(req.params.id);
+
+    try {
+        await userDestroy(id);
+
+        res.sendStatus(200);
+    } catch (err) {
+        if (err.name === "NotFoundError") {
+            return res.status(404).send(err.message);
+        } else if (err.name === "InvalidDataError") {
+            return res.status(422).send(err.message);
+        }
+
+        res.status(500).send(err.message);
+    }
+}
 
 export async function userGet(req: Request, res: Response) {
     const id = Number(req.params.id);
@@ -43,6 +61,27 @@ export async function usersPost(req: Request, res: Response) {
             return res.status(409).send(err.message);
         }
         
+        res.status(500).send(err.message);
+    }
+}
+
+export async function userPut(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const username: string = req.body.username;
+
+    try {
+        await userUpdate(id, username);
+
+        res.sendStatus(200);
+    } catch (err) {
+        if (err.name === "NotFoundError") {
+            return res.status(404).send(err.message);
+        } else if (err.name === "InvalidDataError") {
+            return res.status(422).send(err.message);
+        } else if (err.name === "ConflictError") {
+            return res.status(409).send(err.message);
+        }
+
         res.status(500).send(err.message);
     }
 }
