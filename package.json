@@ -1,0 +1,33 @@
+{
+  "name": "poc2-prisma",
+  "version": "1.0.0",
+  "description": "POC 2 da Driven - Prisma",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcfernandez/driven-poc2-prisma.git"
+  },
+  "keywords": [
+    "driven",
+    "poc",
+    "prisma",
+    "typescript",
+    "api",
+    "node",
+    "express",
+    "javascript",
+    "sql",
+    "postgres",
+    "lcfernandez"
+  ],
+  "author": "lcfernandez",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/lcfernandez/driven-poc2-prisma/issues"
+  },
+  "homepage": "https://github.com/lcfernandez/driven-poc2-prisma#readme"
+}
