@@ -1,6 +1,6 @@
 import { conflictError } from "../errors/conflict-error.js";
 import { NewUser } from "../protocols.js";
-import { create, findByUsername } from "../repositories/usersRepository.js";
+import { create, findAll, findByUsername } from "../repositories/usersRepository.js";
 
 export async function usersCreate(newUser: NewUser) {
     const usernameExists = await findByUsername(newUser.username);
@@ -10,4 +10,10 @@ export async function usersCreate(newUser: NewUser) {
     }
     
     create(newUser);
+}
+
+export async function usersFind() {
+    const users = await findAll();
+
+    return users;
 }
