@@ -1,5 +1,5 @@
-import { recipeDestroy, recipeFind, recipesCreate, recipesFind , recipeUpdate } from "../services/recipesService.js";
-import { NewRecipe } from "../protocols.js";
+import { recipeDestroy, recipeFind, recipeRatingCreate, recipeRatingFind, recipesCreate, recipesFind , recipeUpdate } from "../services/recipesService.js";
+import { NewRating, NewRecipe } from "../protocols.js";
 
 import { Request, Response } from "express";
 
@@ -45,6 +45,43 @@ export async function recipesGet(req: Request, res: Response) {
 
         res.status(200).send(recipes);
     } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
+export async function recipeRatingsGet(req: Request, res: Response) {
+    const id = Number(req.params.id);
+
+    try {
+        const ratings = await recipeRatingFind(id);
+
+        res.status(200).send(ratings);
+    } catch (err) {
+        if (err.name === "NotFoundError") {
+            return res.status(404).send(err.message);
+        } else if (err.name === "ConflictError") {
+            return res.status(409).send(err.message);
+        }
+        
+        res.status(500).send(err.message);
+    }
+}
+
+export async function recipeRatingPost(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const newRating = req.body as NewRating;
+
+    try {
+        await recipeRatingCreate(id, newRating);
+
+        res.sendStatus(201);
+    } catch (err) {
+        if (err.name === "NotFoundError") {
+            return res.status(404).send(err.message);
+        } else if (err.name === "ConflictError") {
+            return res.status(409).send(err.message);
+        }
+        
         res.status(500).send(err.message);
     }
 }

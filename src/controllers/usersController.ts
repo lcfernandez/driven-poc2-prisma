@@ -1,4 +1,11 @@
-import { userDestroy, userFind, usersCreate, usersFind, userUpdate } from "../services/usersService.js";
+import {
+    userDestroy,
+    userFind,
+    userRatingsFind,
+    usersCreate,
+    usersFind,
+    userUpdate
+} from "../services/usersService.js";
 import { NewUser } from "../protocols.js";
 
 import { Request, Response } from "express";
@@ -28,6 +35,24 @@ export async function userGet(req: Request, res: Response) {
         const user = await userFind(id);
 
         res.status(200).send(user);
+    } catch (err) {
+        if (err.name === "NotFoundError") {
+            return res.status(404).send(err.message);
+        } else if (err.name === "InvalidDataError") {
+            return res.status(422).send(err.message);
+        }
+
+        res.status(500).send(err.message);
+    }
+}
+
+export async function userRatingsGet(req: Request, res: Response) {
+    const id = Number(req.params.id);
+
+    try {
+        const ratings = await userRatingsFind(id);
+
+        res.status(200).send(ratings);
     } catch (err) {
         if (err.name === "NotFoundError") {
             return res.status(404).send(err.message);

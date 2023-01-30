@@ -4,5 +4,5 @@ import { Router } from "express";
 
 export const router = Router();
 
-router.use(usersRouter)
 router.use(recipesRouter)
+router.use(usersRouter)
