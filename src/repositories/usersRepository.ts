@@ -1,26 +1,28 @@
 import prisma from "../database.js";
 import { NewUser } from "../protocols.js";
 
-export async function create(newUser: NewUser) {
+async function create(newUser: NewUser) {
     await prisma.users.create({ data: newUser });
 }
 
-export async function destroy(id: number) {
+async function destroy(id: number) {
     await prisma.users.delete({ where: { id }});
 }
 
-export async function findAll() {
+async function findAll() {
     return await prisma.users.findMany();
 }
 
-export async function findById(id: number) {
+async function findById(id: number) {
     return await prisma.users.findUnique({ where: { id }});
 }
 
-export async function findByUsername(username: string) {
-    return await prisma.users.findUnique({ where: { username }});
+async function findByUsername(username: string) {
+    return await prisma.users.findFirst({ where: { username: { equals: username, mode: "insensitive" } }});
 }
 
-export async function update(id: number, username: string) {
+async function update(id: number, username: string) {
     await prisma.users.update({ where: { id }, data: { username } });
 }
+
+export const usersRepository = { create, destroy, findAll, findById, findByUsername, update };

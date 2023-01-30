@@ -2,30 +2,30 @@ import { conflictError } from "../errors/conflict-error.js";
 import { invalidDataError } from "../errors/invalid-data-error.js";
 import { notFoundError } from "../errors/not-found-error.js";
 import { NewUser } from "../protocols.js";
-import { create, destroy, findAll, findById, findByUsername, update } from "../repositories/usersRepository.js";
+import { usersRepository } from "../repositories/usersRepository.js";
 
 export async function userDestroy(id: number) {
     if (isNaN(id)) {
         throw invalidDataError();
     }
 
-    const user = await findById(id);
+    const user = await usersRepository.findById(id);
 
     if (!user) {
         throw notFoundError();
     }
 
-    destroy(id);
+    usersRepository.destroy(id);
 }
 
 export async function usersCreate(newUser: NewUser) {
-    const usernameExists = await findByUsername(newUser.username);
+    const usernameExists = await usersRepository.findByUsername(newUser.username);
 
     if (usernameExists) {
         throw conflictError();
     }
     
-    create(newUser);
+    usersRepository.create(newUser);
 }
 
 export async function userFind(id: number) {
@@ -33,7 +33,7 @@ export async function userFind(id: number) {
         throw invalidDataError();
     }
 
-    const user = await findById(id);
+    const user = await usersRepository.findById(id);
 
     if (!user) {
         throw notFoundError();
@@ -43,7 +43,7 @@ export async function userFind(id: number) {
 }
 
 export async function usersFind() {
-    const users = await findAll();
+    const users = await usersRepository.findAll();
 
     return users;
 }
@@ -53,17 +53,17 @@ export async function userUpdate(id: number, username: string) {
         throw invalidDataError();
     }
 
-    const usernameExists = await findByUsername(username);
+    const usernameExists = await usersRepository.findByUsername(username);
 
     if (usernameExists) {
         throw conflictError();
     }
 
-    const user = await findById(id);
+    const user = await usersRepository.findById(id);
 
     if (!user) {
         throw notFoundError();
     }
 
-    update(id, username);
+    usersRepository.update(id, username);
 }
